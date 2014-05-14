@@ -15,6 +15,17 @@ namespace test_program
 
             var  messages = WinHistory.Login(my, "ТроЛолЛо");
             messages.Send("ГОГОГО");
+            messages.Receive();
+            messages.Receive();
+
+
+            //var msgs = messages.Receive(my);
+
+            //foreach(var msg in msgs)
+            //{
+               
+
+            //}
 
         }
     }
