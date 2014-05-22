@@ -13,19 +13,17 @@ namespace test_program
         {
             Guid my = new Guid();
 
-            var  messages = WinHistory.Login(my, "ТроЛолЛо");
-            messages.Send("ГОГОГО");
-            messages.Receive();
-            messages.Receive();
+            var  history = WinHistory.Login(my, "ТроЛолЛо");
+            history.Send("ГОГОГО");
+            var r = history.Receive();
+            foreach(var message in history.Receive() )
+            {
+                Console.WriteLine(message.Text);
+            }
+            
 
 
-            //var msgs = messages.Receive(my);
 
-            //foreach(var msg in msgs)
-            //{
-               
-
-            //}
 
         }
     }
