@@ -141,6 +141,13 @@ namespace lib
         }
 
 
+        public IEnumerable<Message> Receive(string contains)
+        {
+            var messages = from msg in db.Messages where msg.Text.Contains(contains) select msg;
+            return messages;
+        }
+
+
         /// <summary>
         /// </summary>
         /// <returns>Возвращает список программ-клиентов,которые зарегистрированы в библиотеке</returns>

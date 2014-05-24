@@ -35,10 +35,12 @@
             this.guidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clientInfoBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.MessagesView = new System.Windows.Forms.DataGridView();
-            this.messageBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.stampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.levelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.messageBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.searchQuery = new System.Windows.Forms.TextBox();
+            this.searchButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ClientView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.clientInfoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesView)).BeginInit();
@@ -98,10 +100,6 @@
             this.MessagesView.Size = new System.Drawing.Size(530, 343);
             this.MessagesView.TabIndex = 1;
             // 
-            // messageBindingSource
-            // 
-            this.messageBindingSource.DataSource = typeof(lib.Models.Message);
-            // 
             // textDataGridViewTextBoxColumn
             // 
             this.textDataGridViewTextBoxColumn.DataPropertyName = "Text";
@@ -123,11 +121,35 @@
             this.levelDataGridViewTextBoxColumn.Name = "levelDataGridViewTextBoxColumn";
             this.levelDataGridViewTextBoxColumn.ReadOnly = true;
             // 
+            // messageBindingSource
+            // 
+            this.messageBindingSource.DataSource = typeof(lib.Models.Message);
+            // 
+            // searchQuery
+            // 
+            this.searchQuery.Location = new System.Drawing.Point(642, 8);
+            this.searchQuery.Name = "searchQuery";
+            this.searchQuery.Size = new System.Drawing.Size(100, 20);
+            this.searchQuery.TabIndex = 2;
+            this.searchQuery.TextChanged += new System.EventHandler(this.searchQuery_TextChanged);
+            // 
+            // searchButton
+            // 
+            this.searchButton.Location = new System.Drawing.Point(748, 8);
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Size = new System.Drawing.Size(75, 23);
+            this.searchButton.TabIndex = 3;
+            this.searchButton.Text = "Найти";
+            this.searchButton.UseVisualStyleBackColor = true;
+            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(836, 441);
+            this.Controls.Add(this.searchButton);
+            this.Controls.Add(this.searchQuery);
             this.Controls.Add(this.MessagesView);
             this.Controls.Add(this.ClientView);
             this.Name = "Form1";
@@ -138,6 +160,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.MessagesView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.messageBindingSource)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -153,6 +176,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn stampDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn levelDataGridViewTextBoxColumn;
+        private System.Windows.Forms.TextBox searchQuery;
+        private System.Windows.Forms.Button searchButton;
     }
 }
 

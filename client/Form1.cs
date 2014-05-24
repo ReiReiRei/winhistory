@@ -45,6 +45,18 @@ namespace client
 
         }
 
+        private void searchQuery_TextChanged(object sender, EventArgs e)
+        {
+         
+        }
+
+        private void searchButton_Click(object sender, EventArgs e)
+        {
+            var messages = history.Receive(searchQuery.Text).ToList();
+            MessagesView.DataSource = messages;
+            MessagesView.Update();
+        }
+
 
     }
 }
