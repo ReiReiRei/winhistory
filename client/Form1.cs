@@ -13,13 +13,15 @@ namespace client
     public partial class Form1 : Form
     {
         private lib.WinHistory history;
+        private List<lib.Models.Message> messages;
+        private List<lib.Models.ClientInfo> clients;
         public Form1()
         {
             InitializeComponent();
             history = lib.WinHistory.Login(new Guid("14d88c08-115a-4599-8837-4d2f72065169"), "LogViewer");
             history.Send("Запуск просмоторщика лога");
-            var Clients = history.ReceiveClients().ToList();
-            ClientView.DataSource = Clients;
+            clients = history.ReceiveClients().ToList();
+            ClientView.DataSource = clients;
             ClientView.Update();
 
             var Messages = history.Receive().ToList();
@@ -52,9 +54,22 @@ namespace client
 
         private void searchButton_Click(object sender, EventArgs e)
         {
-            var messages = history.Receive(searchQuery.Text).ToList();
-            MessagesView.DataSource = messages;
+            messages = history.Receive(searchQuery.Text).ToList();
             MessagesView.Update();
+        }
+
+        private void exportButton_Click(object sender, EventArgs e)
+        {
+            var saveFile = new SaveFileDialog();
+            var exportTypes = new List<ILogExport> { new LogExportToTXT(), new LogExportToXML() };
+            var exporter  = new LogExporter(exportTypes);
+            saveFile.Filter = exporter.Filter;
+            var dialogResult = saveFile.ShowDialog();
+
+            if(dialogResult == DialogResult.OK)
+            {
+                exporter.Export(saveFile.FileName, saveFile.FilterIndex - 1 , (List<lib.Models.Message>) MessagesView.DataSource );
+            }
         }
 
 

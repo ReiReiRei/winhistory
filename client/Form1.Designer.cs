@@ -30,21 +30,22 @@
         {
             this.components = new System.ComponentModel.Container();
             this.ClientView = new System.Windows.Forms.DataGridView();
-            this.clientInfoIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.guidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clientInfoBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.MessagesView = new System.Windows.Forms.DataGridView();
+            this.searchQuery = new System.Windows.Forms.TextBox();
+            this.searchButton = new System.Windows.Forms.Button();
             this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.stampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.levelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.messageBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.searchQuery = new System.Windows.Forms.TextBox();
-            this.searchButton = new System.Windows.Forms.Button();
+            this.clientInfoIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.guidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clientInfoBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.exportButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ClientView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clientInfoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.messageBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.clientInfoBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // ClientView
@@ -56,34 +57,12 @@
             this.nameDataGridViewTextBoxColumn,
             this.guidDataGridViewTextBoxColumn});
             this.ClientView.DataSource = this.clientInfoBindingSource;
-            this.ClientView.Location = new System.Drawing.Point(12, 86);
+            this.ClientView.Location = new System.Drawing.Point(12, 66);
             this.ClientView.Name = "ClientView";
-            this.ClientView.Size = new System.Drawing.Size(275, 343);
+            this.ClientView.Size = new System.Drawing.Size(275, 363);
             this.ClientView.TabIndex = 0;
             this.ClientView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ClientView_CellContentClick);
             this.ClientView.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ClientView_CellEnter);
-            // 
-            // clientInfoIdDataGridViewTextBoxColumn
-            // 
-            this.clientInfoIdDataGridViewTextBoxColumn.DataPropertyName = "ClientInfoId";
-            this.clientInfoIdDataGridViewTextBoxColumn.HeaderText = "ClientInfoId";
-            this.clientInfoIdDataGridViewTextBoxColumn.Name = "clientInfoIdDataGridViewTextBoxColumn";
-            // 
-            // nameDataGridViewTextBoxColumn
-            // 
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            // 
-            // guidDataGridViewTextBoxColumn
-            // 
-            this.guidDataGridViewTextBoxColumn.DataPropertyName = "Guid";
-            this.guidDataGridViewTextBoxColumn.HeaderText = "Guid";
-            this.guidDataGridViewTextBoxColumn.Name = "guidDataGridViewTextBoxColumn";
-            // 
-            // clientInfoBindingSource
-            // 
-            this.clientInfoBindingSource.DataSource = typeof(lib.Models.ClientInfo);
             // 
             // MessagesView
             // 
@@ -94,11 +73,29 @@
             this.stampDataGridViewTextBoxColumn,
             this.levelDataGridViewTextBoxColumn});
             this.MessagesView.DataSource = this.messageBindingSource;
-            this.MessagesView.Location = new System.Drawing.Point(294, 86);
+            this.MessagesView.Location = new System.Drawing.Point(294, 66);
             this.MessagesView.Name = "MessagesView";
             this.MessagesView.ReadOnly = true;
-            this.MessagesView.Size = new System.Drawing.Size(530, 343);
+            this.MessagesView.Size = new System.Drawing.Size(530, 363);
             this.MessagesView.TabIndex = 1;
+            // 
+            // searchQuery
+            // 
+            this.searchQuery.Location = new System.Drawing.Point(642, 8);
+            this.searchQuery.Name = "searchQuery";
+            this.searchQuery.Size = new System.Drawing.Size(100, 20);
+            this.searchQuery.TabIndex = 2;
+            this.searchQuery.TextChanged += new System.EventHandler(this.searchQuery_TextChanged);
+            // 
+            // searchButton
+            // 
+            this.searchButton.Location = new System.Drawing.Point(748, 8);
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Size = new System.Drawing.Size(75, 23);
+            this.searchButton.TabIndex = 3;
+            this.searchButton.Text = "Найти";
+            this.searchButton.UseVisualStyleBackColor = true;
+            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
             // 
             // textDataGridViewTextBoxColumn
             // 
@@ -125,29 +122,44 @@
             // 
             this.messageBindingSource.DataSource = typeof(lib.Models.Message);
             // 
-            // searchQuery
+            // clientInfoIdDataGridViewTextBoxColumn
             // 
-            this.searchQuery.Location = new System.Drawing.Point(642, 8);
-            this.searchQuery.Name = "searchQuery";
-            this.searchQuery.Size = new System.Drawing.Size(100, 20);
-            this.searchQuery.TabIndex = 2;
-            this.searchQuery.TextChanged += new System.EventHandler(this.searchQuery_TextChanged);
+            this.clientInfoIdDataGridViewTextBoxColumn.DataPropertyName = "ClientInfoId";
+            this.clientInfoIdDataGridViewTextBoxColumn.HeaderText = "ClientInfoId";
+            this.clientInfoIdDataGridViewTextBoxColumn.Name = "clientInfoIdDataGridViewTextBoxColumn";
             // 
-            // searchButton
+            // nameDataGridViewTextBoxColumn
             // 
-            this.searchButton.Location = new System.Drawing.Point(748, 8);
-            this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(75, 23);
-            this.searchButton.TabIndex = 3;
-            this.searchButton.Text = "Найти";
-            this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            // 
+            // guidDataGridViewTextBoxColumn
+            // 
+            this.guidDataGridViewTextBoxColumn.DataPropertyName = "Guid";
+            this.guidDataGridViewTextBoxColumn.HeaderText = "Guid";
+            this.guidDataGridViewTextBoxColumn.Name = "guidDataGridViewTextBoxColumn";
+            // 
+            // clientInfoBindingSource
+            // 
+            this.clientInfoBindingSource.DataSource = typeof(lib.Models.ClientInfo);
+            // 
+            // exportButton
+            // 
+            this.exportButton.Location = new System.Drawing.Point(642, 35);
+            this.exportButton.Name = "exportButton";
+            this.exportButton.Size = new System.Drawing.Size(182, 23);
+            this.exportButton.TabIndex = 4;
+            this.exportButton.Text = "Экспорт";
+            this.exportButton.UseVisualStyleBackColor = true;
+            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(836, 441);
+            this.Controls.Add(this.exportButton);
             this.Controls.Add(this.searchButton);
             this.Controls.Add(this.searchQuery);
             this.Controls.Add(this.MessagesView);
@@ -156,9 +168,9 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ClientView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clientInfoBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.messageBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.clientInfoBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -178,6 +190,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn levelDataGridViewTextBoxColumn;
         private System.Windows.Forms.TextBox searchQuery;
         private System.Windows.Forms.Button searchButton;
+        private System.Windows.Forms.Button exportButton;
     }
 }
 
