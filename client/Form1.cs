@@ -57,6 +57,11 @@ namespace client
             MessagesView.Update();
         }
 
+        private void bindingNavigator1_RefreshItems(object sender, EventArgs e)
+        {
+
+        }
+
 
     }
 }
