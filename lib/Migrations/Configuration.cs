@@ -10,6 +10,7 @@ namespace lib.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(lib.Models.WinHistoryDbContext context)

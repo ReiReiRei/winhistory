@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-///
-///<summary> Пространство моделей. Описывает основные сущности которыми оперирует логировщик</summary>
+using System.ComponentModel.DataAnnotations.Schema;
+
+
 namespace lib.Models
 {
     /// <summary>
@@ -33,5 +34,8 @@ namespace lib.Models
         /// Уровень важности сообщения, больше - важнеее.
         /// </summary>
         public int Level { get; set; }
+
+
+           
     }
 }

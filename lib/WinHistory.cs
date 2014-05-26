@@ -94,87 +94,121 @@ namespace lib
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns>Возвращает все сообщения из лога по всем программам .</returns>
-        /// 
+        ///// <summary>
+        ///// Возвращает все сообщения из лога по всем программам .
+        ///// </summary>
+        ///// <returns></returns>
+        ///// 
 
-        public IEnumerable<Message> Receive()
-        {
+        //public IEnumerable<Message> Receive()
+        //{
 
-            return Receive(0);
-        }
+        //    return Receive(0);
+        //}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="level">Минимульный уровень ошибки</param>
-        /// <returns>Возвращает все сообщения из лога с соотвествующими уровнями ошибки</returns>
-        public  IEnumerable<Message> Receive(int level)
-        {
-            var messages = from msg in db.Messages where  msg.Level >= level select msg;
-            return messages;
-        }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="level">Минимульный уровень ошибки</param>
+        ///// <returns>Возвращает все сообщения из лога с соотвествующими уровнями ошибки</returns>
+        //public  IEnumerable<Message> Receive(int level)
+        //{
+        //    var messages = from msg in db.Messages where  msg.Level >= level select msg;
+        //    return messages;
+        //}
        
         
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="guid">Уникальный guid программы</param>
-        /// <returns> Возвращает все сообщения из лога по конкретной программе.</returns>
-        public IEnumerable<Message> Receive(Guid guid)
-        {
-            return Receive(guid, 0);
-        }
+        ///// <summary>
+        ///// Возвращает все сообщения из лога по конкретной программе.
+        ///// </summary>
+        ///// <param name="guid">Уникальный guid программы</param>
+        ///// <returns></returns>
+        //public IEnumerable<Message> Receive(Guid guid)
+        //{
+        //    return Receive(guid, 0);
+        //}
+
+        ///// <summary>
+        /////Возвращает все сообщения из лога с соответсвующими уровнями ошибки по конкретной программе. 
+        ///// </summary>
+        ///// <param name="guid">Уникальный guid программы</param>
+        ///// <param name="level">Минмильный уровень сообщения</param>
+        ///// <returns></returns>
+        //public IEnumerable<Message> Receive(Guid guid, int level)
+        //{
+        //    var messages = from msg in db.Messages where msg.ClientInfo.Guid == guid.ToString() && msg.Level >= level select msg;
+        //    return messages;
+        //}
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="contains">Со</param>
+        ///// <returns></returns>
+        //public IEnumerable<Message> Receive(string contains)
+        //{
+        //    var messages = from msg in db.Messages where msg.Text.Contains(contains) select msg;
+        //    return messages;
+        //}
+
 
         /// <summary>
-        /// 
+        /// Возвращает список программ-клиентов,которые зарегистрированы в библиотеке
         /// </summary>
-        /// <param name="guid">Уникальный guid программы</param>
-        /// <param name="level">Минмильный уровень сообщения</param>
-        /// <returns>Возвращает все сообщения из лога с соответсвующими уровнями ошибки по конкретной программе.</returns>
-        public IEnumerable<Message> Receive(Guid guid, int level)
-        {
-            var messages = from msg in db.Messages where msg.ClientInfo.Guid == guid.ToString() && msg.Level >= level select msg;
-            return messages;
-        }
-
-
-        public IEnumerable<Message> Receive(string contains)
-        {
-            var messages = from msg in db.Messages where msg.Text.Contains(contains) select msg;
-            return messages;
-        }
-
-
-        /// <summary>
-        /// </summary>
-        /// <returns>Возвращает список программ-клиентов,которые зарегистрированы в библиотеке</returns>
+        /// <returns></returns>
         public IEnumerable<ClientInfo> ReceiveClients()
         {
             return from clients in db.Clients select clients;
         }
 
-
+        /// <summary>
+        /// Возвращает  сообщения из лога
+        /// </summary>
+        /// <param name="paramets">Древо параметров поиска</param>
+        /// <returns></returns>
         public IEnumerable<Message> Receive(SearchParametrs paramets)
         {
 
-            var raw_msgs = (from msg in db.Messages where msg.Level > paramets.MinLevel && msg.Text.Contains(paramets.Contains) && ( (!paramets.HasGuid.HasValue)  || paramets.HasGuid.Value.ToString() == msg.ClientInfo.Guid ) select msg).ToList();
+
+            var raw_msgs = (from msg in db.Messages
+                            where msg.Level >= paramets.MinLevel &&
+                                (paramets.Contains == null || msg.Text.Contains(paramets.Contains)) &&
+                                ((!paramets.HasGuid.HasValue) || paramets.HasGuid.Value.ToString() == msg.ClientInfo.Guid)
+                            select msg).ToList();
             if(paramets.Children == null || paramets.Children.Count() == 0)
             {
                 return raw_msgs;
             }
-            var result = new List<IEnumerable<Message>>();
+            var all_msgs = new List<Message>();
             foreach( var par in paramets.Children)
             {
-                result.Add(Receive(par, raw_msgs));
+                all_msgs = all_msgs.Concat(Receive(par, raw_msgs)).ToList();
             }
-            var msgs = from r in result select 
+            return all_msgs; 
 
         }
+        /// <summary>
+        /// Возвращает сообщения из лога, но отбор идёи не из базыэ,а из какого-либо IEnumerable источника
+        /// </summary>
+        /// <param name="paramets">Древо параметров поиска</param>
+        /// <param name="alreadyRecievd">Источник данных из которого происходит отбор сообщений</param>
+        /// <returns></returns>
         public IEnumerable<Message> Receive(SearchParametrs paramets, IEnumerable<Message> alreadyRecievd)
         {
+            var raw_msgs = (from msg in alreadyRecievd where msg.Level >= paramets.MinLevel && 
+                               (paramets.Contains == null || msg.Text.Contains(paramets.Contains)) && 
+                                ((!paramets.HasGuid.HasValue) || paramets.HasGuid.Value.ToString() == msg.ClientInfo.Guid) 
+                            select msg).ToList();
+            if (paramets.Children == null || paramets.Children.Count() == 0)
+            {
+                return raw_msgs;
+            }
+            var all_msgs = new List<Message>();
+            foreach (var par in paramets.Children)
+            {
+                all_msgs = all_msgs.Concat(Receive(par, raw_msgs)).ToList();
+            }
+            return all_msgs; 
 
         }
 
