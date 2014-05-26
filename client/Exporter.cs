@@ -99,12 +99,18 @@ namespace client
     {
         private List<ILogExport> typesOfExport;
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="types"> Список ссылок на объекты, реализовывающие экспорт</param>
         public LogExporter(List<ILogExport> types)
         {
             typesOfExport = types;
         }
 
+        /// <summary>
+        /// Список фильтров,которые появятся в диалоге сохранения файла.
+        /// </summary>
         public string Filter
         {
             get
@@ -127,6 +133,12 @@ namespace client
             }
         }
 
+        /// <summary>
+        /// Производит экспорт сообщений в указанный формат
+        /// </summary>
+        /// <param name="path">Имя файла(полный путь) куда будет произведен экспорт</param>
+        /// <param name="index">Индекс фильтраэ, который был применен при сохранении</param>
+        /// <param name="messages"> Сообщения,которые будут экспортированны</param>
         public void Export(string path, int index, IEnumerable<Message> messages)
         {
             typesOfExport[index].ExportToFile(path, messages);

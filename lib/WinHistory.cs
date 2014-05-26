@@ -7,7 +7,7 @@ using lib.Models;
 
 namespace lib
 {
-
+    
 
     /// <summary>
     /// Класс реализующий  взаимодействия программы-пользователя и системы логирования.
@@ -19,7 +19,7 @@ namespace lib
     public class WinHistory
     {
 
-        private WinHistoryDbContext db = new WinHistoryDbContext();
+        private static WinHistoryDbContext db = new WinHistoryDbContext();
 
         private readonly ClientInfo Client;
         
@@ -156,6 +156,28 @@ namespace lib
             return from clients in db.Clients select clients;
         }
 
+
+        public IEnumerable<Message> Receive(SearchParametrs paramets)
+        {
+
+            var raw_msgs = (from msg in db.Messages where msg.Level > paramets.MinLevel && msg.Text.Contains(paramets.Contains) && ( (!paramets.HasGuid.HasValue)  || paramets.HasGuid.Value.ToString() == msg.ClientInfo.Guid ) select msg).ToList();
+            if(paramets.Children == null || paramets.Children.Count() == 0)
+            {
+                return raw_msgs;
+            }
+            var result = new List<IEnumerable<Message>>();
+            foreach( var par in paramets.Children)
+            {
+                result.Add(Receive(par, raw_msgs));
+            }
+            var msgs = from r in result select 
+
+        }
+        public IEnumerable<Message> Receive(SearchParametrs paramets, IEnumerable<Message> alreadyRecievd)
+        {
+
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -165,5 +187,9 @@ namespace lib
         {
             return (from clients in db.Clients where clients.Guid == guid.ToString() select clients).Single();
         }
+
+
+
     }
+
 }

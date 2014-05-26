@@ -22,7 +22,7 @@ namespace client
             history.Send("Запуск просмоторщика лога");
             clients = history.ReceiveClients().ToList();
             ClientView.DataSource = clients;
-            ClientView.Update();
+            
 
             var Messages = history.Receive().ToList();
             MessagesView.DataSource = Messages;
@@ -55,7 +55,7 @@ namespace client
         private void searchButton_Click(object sender, EventArgs e)
         {
             messages = history.Receive(searchQuery.Text).ToList();
-            MessagesView.Update();
+            
         }
 
         private void exportButton_Click(object sender, EventArgs e)
