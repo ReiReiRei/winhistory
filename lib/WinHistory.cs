@@ -171,9 +171,6 @@ namespace lib
 
 
             var raw_msgs = (from msg in db.Messages
-                            where msg.Level >= paramets.MinLevel &&
-                                (paramets.Contains == null || msg.Text.Contains(paramets.Contains)) &&
-                                ((!paramets.HasGuid.HasValue) || paramets.HasGuid.Value.ToString() == msg.ClientInfo.Guid)
                             select msg).ToList();
             if(paramets.Children == null || paramets.Children.Count() == 0)
             {
@@ -195,10 +192,7 @@ namespace lib
         /// <returns></returns>
         public IEnumerable<Message> Receive(SearchParametrs paramets, IEnumerable<Message> alreadyRecievd)
         {
-            var raw_msgs = (from msg in alreadyRecievd where msg.Level >= paramets.MinLevel && 
-                               (paramets.Contains == null || msg.Text.Contains(paramets.Contains)) && 
-                                ((!paramets.HasGuid.HasValue) || paramets.HasGuid.Value.ToString() == msg.ClientInfo.Guid) 
-                            select msg).ToList();
+            var raw_msgs = paramets.Search(alreadyRecievd);
             if (paramets.Children == null || paramets.Children.Count() == 0)
             {
                 return raw_msgs;

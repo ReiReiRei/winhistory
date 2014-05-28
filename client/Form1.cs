@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using lib;
+
 namespace client
 {
     public partial class Form1 : Form
@@ -21,7 +23,7 @@ namespace client
             history = lib.WinHistory.Login(new Guid("14d88c08-115a-4599-8837-4d2f72065169"), "LogViewer");
             history.Send("Запуск просмоторщика лога");
             clients = history.ReceiveClients().ToList();
-            foreach(var client in clients)
+            foreach (var client in clients)
             {
                 client.MinLevel = 0;
                 client.Search = true;
@@ -100,17 +102,21 @@ namespace client
 
         private void ResfreshMessages()
         {
-            var mainParam = new lib.SearchParametrs();
-            
-            mainParam.Contains = containsQuery.Text;
+            var mainParam = new NoParam();
+            var globalContains = new ContainsParam(containsQuery.Text);
+            mainParam.AddChild(globalContains);
+
+            SearchParametrs globalMinLevel;
             try
             {
-                mainParam.MinLevel = Convert.ToInt32(minLevelQuery.Text);
+                globalMinLevel = new HasMinimumLevelParam(Convert.ToInt32(minLevelQuery.Text));
             }
-            catch(System.FormatException e)
+            catch (System.FormatException e)
             {
-                mainParam.MinLevel = 0;
+                globalMinLevel = new NoParam();
             }
+            globalContains.AddChild(globalMinLevel);
+
 
 
 
@@ -122,11 +128,31 @@ namespace client
                     continue;
                 }
 
-                var child_param = new lib.SearchParametrs();
-                child_param.Contains = Convert.ToString(row.Cells["Contains"].Value);
-                child_param.HasGuid = new Guid(row.Cells["Guid"].Value as string);
-                child_param.MinLevel = Convert.ToInt32(row.Cells["MinLevel"].Value);
-                mainParam.AddChild(child_param);
+
+
+
+
+                SearchParametrs childHasGuid;
+                childHasGuid = new lib.HasGuidParam(new Guid(row.Cells["Guid"].Value as string));
+ globalMinLevel.AddChild(childHasGuid);
+
+                var childContains = new lib.ContainsParam(Convert.ToString(row.Cells["Contains"].Value));
+                childHasGuid.AddChild(childContains);
+
+                SearchParametrs childMinLevel;
+                try
+                {
+                    childMinLevel = new lib.HasMinimumLevelParam(Convert.ToInt32(row.Cells["MinLevel"].Value));
+
+                }
+                catch(FormatException e)
+                {
+                    childMinLevel = new NoParam();
+                }
+                childContains.AddChild(childMinLevel);
+
+
+
 
             }
             messages = history.Receive(mainParam).ToList();
