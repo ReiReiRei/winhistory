@@ -45,10 +45,11 @@ namespace client
                 }
                 file.Close();
             }
-            finally
+            catch(Exception e)
             {
 
             }
+         
 
         }
 
@@ -80,7 +81,7 @@ namespace client
                 }
                 file.Close();
             }
-            finally
+            catch(Exception E)
             {
 
             }
