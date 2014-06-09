@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using lib.Models;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace lib
 {
@@ -216,6 +218,52 @@ namespace lib
             return (from clients in db.Clients where clients.Guid == guid.ToString() select clients).Single();
         }
 
+        public ClientInfo ReciveClientInfoBAD(Guid guid)
+        {
+            var connection = new SqlConnection();
+           var query = "{SELECT [Extent1].[ClientInfoId] AS [ClientInfoId], [Extent1].[Guid] AS [Guid], [Extent1].[Name] AS [Name] FROM [dbo].[ClientInfoes] AS [Extent1] WHERE [Extent1].[Guid] =@Name";
+            var command = new SqlCommand(query,connection);
+            var  Param1 = new SqlParameter("@Name", SqlDbType.VarChar);
+            Param1.Value = guid.ToString();
+            command.Parameters.Add(Param1);
+           SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+            var result = command.ExecuteReader();
+            var ClientInfo = new ClientInfo();
+            
+            if(result.HasRows)
+            {
+                while(result.Read())
+                {
+                    ClientInfo.ClientInfoId = result.GetInt32(0);
+                    string r = result.GetString(1);
+                    Guid g = new Guid();
+                   
+                        if(!(Guid.TryParse(r, out g)))
+                        {
+                            return null;
+                        }
+                   
+                 
+                    ClientInfo.MinLevel = 0;
+                    ClientInfo.Search = true;
+                    ClientInfo.Contains = "";
+                    ClientInfo.Name = result.GetString(2);
+                }
+
+            }
+            else
+            {
+                return null;
+            }
+            return ClientInfo;
+          
+
+
+
+        }
+
+
+        
 
 
     }
