@@ -23,67 +23,7 @@ namespace lib.Models
     /// </summary>
     public class ClientInfo
     {
-        public static ClientInfo getClientInfoById(int id)
-        {
-            var connection = new SqlConnection();
-            var query = "SELECT [Extent1].[ClientInfoId] AS [ClientInfoId], [Extent1].[Guid] AS [Guid], [Extent1].[Name] AS [Name] FROM [dbo].[ClientInfoes] AS [Extent1] WHERE [Extent1].[ClientInfoId] =@Id";
-            var command = new SqlCommand(query, connection);
-            var Param1 = new SqlParameter("@id", SqlDbType.Int);
-
-
-            command.Parameters.Add(Param1);
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-            var result = command.ExecuteReader();
-            var ClientInfo = new ClientInfo();
-
-            if (result.HasRows)
-            {
-                while (result.Read())
-                {
-                    ClientInfo.ClientInfoId = result.GetInt32(0);
-                    string r = result.GetString(1);
-                    Guid g = new Guid(r);
-
-
-                    ClientInfo.MinLevel = 0;
-                    ClientInfo.Search = true;
-                    ClientInfo.Contains = "";
-                    ClientInfo.Name = result.GetString(2);
-                }
-
-            }
-            else
-            {
-                return null;
-            }
-            return ClientInfo;
-
-
-        }
-
-        public static void Delete(int id)
-        {
-   
-            command.Dispose();
-            
-        }
-         
-        public void insertInDb()
-        {
-            var connection = new SqlConnection();
-            var query = "INSERT INTO [dbo].[ClientInfoes] VALUES (0,@Guid,@Name)";
-            var command = new SqlCommand(query, connection);
-            var Param1 = new SqlParameter("@Guid", SqlDbType.VarChar);
-            var Param2 = new SqlParameter("@Name", SqlDbType.VarChar);
-            Param1.Value = this.Guid;
-            Param2.Value = this.Name;
-            command.Dispose();
-            
-
-        }
-
-
-      
+       
         /// <summary>
         /// Идентификатор клиента
         /// </summary>
@@ -115,6 +55,192 @@ namespace lib.Models
         /// </summary>
         [NotMapped]
         public bool Search { get; set; }
+
+    }
+
+
+    public class ClientInfoModule:ClientInfo
+    {
+
+
+        [NotMapped]
+        public SqlConnection Connection { get; set; }
+        public ClientInfo find(Guid guid)
+        {
+
+
+            var gate = new ClientGateway(Connection);
+            gate.find(guid);
+            return gate.Client;
+        }
+
+
+        public IEnumerable<ClientInfo> findAll()
+        {
+
+            var query = "SELECT [Extent1].[ClientInfoId] AS [ClientInfoId], [Extent1].[Guid] AS [Guid], [Extent1].[Name] AS [Name] FROM [dbo].[ClientInfoes] AS [Extent1]";
+            var command = new SqlCommand(query, Connection);
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+            var result = command.ExecuteReader();
+            var ClientInfo = new ClientInfo();
+            var ret = new List<ClientInfo>();
+            if (result.HasRows)
+            {
+                while (result.Read())
+                {
+                    ClientInfo.ClientInfoId = result.GetInt32(0);
+                    string r = result.GetString(1);
+                    Guid g = new Guid(r);
+
+
+                    ClientInfo.MinLevel = 0;
+                    ClientInfo.Search = true;
+                    ClientInfo.Contains = "";
+                    ClientInfo.Name = result.GetString(2);
+                    ret.Add(ClientInfo);
+                }
+
+            }
+            else
+            {
+                return null;
+            }
+            return ret;
+
+
+        }
+
+
+
+        public void deleteClient(ClientInfo client)
+        {
+
+            var gate = new ClientGateway(Connection);
+            gate.Client = client;
+            gate.delete();
+        }
+
+        public void deleteClient()
+        {
+            deleteClient(this);
+        }
+
+
+        public void addClient(ClientInfo client)
+        {
+
+            var gate = new ClientGateway(Connection);
+            gate.Client = client;
+            gate.insert();
+        }
+
+    }
+
+
+
+    public class ClientGateway
+    {
+
+        public ClientGateway(SqlConnection con)
+        {
+            Connection = con;
+        }
+
+        public SqlConnection Connection { get; set; }
+
+
+        public ClientInfo Client { get; set; }
+        public void delete()
+        {
+           
+
+            var query = "DELETE FROM [dbo].[ClientInfoes] WHERE [dbo].[ClientInfoes].[Guid] = @Guid";
+            var command = new SqlCommand(query, Connection);
+            var Param1 = new SqlParameter("@Guid", SqlDbType.VarChar);
+    
+            Param1.Value = Client.Guid;
+            
+            command.Dispose();
+            Connection.Close();
+            
+        }
+
+        public void insert()
+        {
+            
+            Connection.Open();
+            var query = "INSERT INTO [dbo].[ClientInfoes] VALUES (0,@Guid,@Name)";
+            var command = new SqlCommand(query, Connection);
+            var Param1 = new SqlParameter("@Guid", SqlDbType.VarChar);
+            var Param2 = new SqlParameter("@Name", SqlDbType.VarChar);
+            Param1.Value = Client.Guid;
+            Param2.Value = Client.Name;
+            command.Dispose();
+            Connection.Close();
+            
+
+        }
+
+        public void find(Guid guid)
+        {
+            var query = "SELECT [Extent1].[ClientInfoId] AS [ClientInfoId], [Extent1].[Guid] AS [Guid], [Extent1].[Name] AS [Name] FROM [dbo].[ClientInfoes] AS [Extent1] WHERE [Extent1].[Guid] =@Guid";
+            var command = new SqlCommand(query, Connection);
+            var Param1 = new SqlParameter("@Guid", SqlDbType.VarChar);
+            Param1.Value = guid.ToString();
+
+
+            command.Parameters.Add(Param1);
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+            var result = command.ExecuteReader();
+            ClientInfo ClientInfo = null;
+
+            if (result.HasRows)
+            {
+                while (result.Read())
+                {
+                    ClientInfo = ClientInfoMapper.get(result);
+                }
+
+            }
+            else
+            {
+                Client = null;
+            }
+            Client = ClientInfo;
+        }
+        public void update()
+        {
+            //Connection.Open();
+            //var query = "INSERT INTO [dbo].[ClientInfoes] VALUES (0,@Guid,@Name)";
+            //var command = new SqlCommand(query, Connection);
+            //var Param1 = new SqlParameter("@Guid", SqlDbType.VarChar);
+            //var Param2 = new SqlParameter("@Name", SqlDbType.VarChar);
+            //Param1.Value = Client.Guid;
+            //Param2.Value = Client.Name;
+            //command.Dispose();
+            //Connection.Close();
+
+        }
+    }
+     
+
+    public class ClientInfoMapper
+    {
+        static public  ClientInfo get( SqlDataReader result)
+        {
+            var ClientInfo = new ClientInfo();
+            ClientInfo.ClientInfoId = result.GetInt32(0);
+            string r = result.GetString(1);
+            Guid g = new Guid(r);
+
+
+            ClientInfo.MinLevel = 0;
+            ClientInfo.Search = true;
+            ClientInfo.Contains = "";
+            ClientInfo.Name = result.GetString(2);
+            return ClientInfo;
+        }
 
     }
 }
