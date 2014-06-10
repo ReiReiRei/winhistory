@@ -59,7 +59,7 @@ namespace lib
 
       public override IEnumerable<Models.Message> Search(IEnumerable<Models.Message> raw_msgs)
       {
-          return from m in raw_msgs where m.ClientInfo.Guid == HasGuid.ToString() select m;
+          return from m in raw_msgs where  m.ClientInfo != null && m.ClientInfo.Guid == HasGuid.ToString() select m;
       }
   }
 

@@ -65,6 +65,11 @@ namespace lib.Models
 
         [NotMapped]
         public SqlConnection Connection { get; set; }
+
+        public ClientInfoModule(SqlConnection connnetion)
+        {
+            Connection = connnetion;
+        }
         public ClientInfo find(Guid guid)
         {
 
@@ -184,6 +189,7 @@ namespace lib.Models
 
         public void find(Guid guid)
         {
+            Connection.Open();
             var query = "SELECT [Extent1].[ClientInfoId] AS [ClientInfoId], [Extent1].[Guid] AS [Guid], [Extent1].[Name] AS [Name] FROM [dbo].[ClientInfoes] AS [Extent1] WHERE [Extent1].[Guid] =@Guid";
             var command = new SqlCommand(query, Connection);
             var Param1 = new SqlParameter("@Guid", SqlDbType.VarChar);
@@ -208,6 +214,7 @@ namespace lib.Models
                 Client = null;
             }
             Client = ClientInfo;
+            Connection.Close();
         }
         public void update()
         {

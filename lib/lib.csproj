@@ -66,11 +66,29 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Преобразователь данных.sequencediagram" />
+    <None Include="Шлюз записи данных.sequencediagram" />
+    <None Include="МодульТаблицы.sequencediagram" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Компоновщик.sequencediagram" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Преобразователь данных.sequencediagram.layout">
+      <DependentUpon>Преобразователь данных.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Шлюз записи данных.sequencediagram.layout">
+      <DependentUpon>Шлюз записи данных.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="МодульТаблицы.sequencediagram.layout">
+      <DependentUpon>МодульТаблицы.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Компоновщик.sequencediagram.layout">
+      <DependentUpon>Компоновщик.sequencediagram</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
