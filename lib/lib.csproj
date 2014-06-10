@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="CodeMap1.dgml" />
     <None Include="Преобразователь данных.sequencediagram" />
     <None Include="Шлюз записи данных.sequencediagram" />
     <None Include="МодульТаблицы.sequencediagram" />
