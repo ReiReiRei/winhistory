@@ -94,15 +94,7 @@ namespace lib.Models
             {
                 while (result.Read())
                 {
-                    ClientInfo.ClientInfoId = result.GetInt32(0);
-                    string r = result.GetString(1);
-                    Guid g = new Guid(r);
-
-
-                    ClientInfo.MinLevel = 0;
-                    ClientInfo.Search = true;
-                    ClientInfo.Contains = "";
-                    ClientInfo.Name = result.GetString(2);
+                    ClientInfo = ClientInfoMapper.get(result);
                     ret.Add(ClientInfo);
                 }
 
